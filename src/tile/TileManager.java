@@ -1,10 +1,12 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -15,17 +17,21 @@ public class TileManager {
 	GamePanel gp;
 	public Tile[] tile;
 	public int mapTileNum[][];
+//	public int num[];
 	
+	List<Integer>num = new ArrayList<Integer>(); 
 	
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		
-		tile = new Tile[2400];
+		tile = new Tile[2900];
 		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
 		
 		getTileImage();
 		loadMap("/maps/vilg.txt");
+		loadColl("/maps/village_collide.txt");
+		getCollision();
 	}
 	
 	public void loadMap(String filepath) {
@@ -55,6 +61,38 @@ public class TileManager {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void loadColl(String filepath) {
+		try {
+			InputStream isColl = getClass().getResourceAsStream(filepath);
+			BufferedReader brColl = new BufferedReader(new InputStreamReader(isColl));
+			String lineString = brColl.readLine();
+			
+			int cek =0;
+			
+			String[] numbers;
+			numbers = lineString.split(" ");
+			for(String nums: numbers) {
+//				num[cek] =  new int(Integer.parseInt(nums));
+				num.add(Integer.parseInt(nums));
+				if(num.get(cek) == 1523) {
+					break;
+				}
+				cek++;
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void getCollision() {
+		for(int i=0;i<num.size();i++) {
+			int getCol;
+			getCol = num.get(i);
+			tile[getCol].collision = true;
 		}
 	}
 	
