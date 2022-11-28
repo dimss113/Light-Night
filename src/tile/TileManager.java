@@ -77,7 +77,7 @@ public class TileManager {
 			for(String nums: numbers) {
 //				num[cek] =  new int(Integer.parseInt(nums));
 				num.add(Integer.parseInt(nums));
-				if(num.get(cek) == 1523) {
+				if(num.get(cek) == 2239) {
 					break;
 				}
 				cek++;

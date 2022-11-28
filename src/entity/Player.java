@@ -42,7 +42,7 @@ public class Player extends Entity{
 //		worldY = gp.tileSize * 21; // starting position (center of screen)
 		worldX = gp.tileSize * 36;
 		worldY = gp.tileSize * 35;
-		speed = 3;
+		speed = 4;
 		direction = "down";
 	}
 	
@@ -50,12 +50,16 @@ public class Player extends Entity{
 		try {
 			up1 = ImageIO.read(getClass().getResourceAsStream("/player/10.png"));
 			up2 = ImageIO.read(getClass().getResourceAsStream("/player/11.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/player/3.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/player/1.png"));
+			up3 = ImageIO.read(getClass().getResourceAsStream("/player/12.png"));
+			down1 = ImageIO.read(getClass().getResourceAsStream("/player/1.png"));
+			down2 = ImageIO.read(getClass().getResourceAsStream("/player/2.png"));
+			down3 = ImageIO.read(getClass().getResourceAsStream("/player/3.png"));
 			left1 = ImageIO.read(getClass().getResourceAsStream("/player/7.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/player/9.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/player/6.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/player/4.png"));
+			left2 = ImageIO.read(getClass().getResourceAsStream("/player/8.png"));
+			left3 = ImageIO.read(getClass().getResourceAsStream("/player/9.png"));
+			right1 = ImageIO.read(getClass().getResourceAsStream("/player/4.png"));
+			right2 = ImageIO.read(getClass().getResourceAsStream("/player/5.png"));
+			right3 = ImageIO.read(getClass().getResourceAsStream("/player/6.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +107,9 @@ public class Player extends Entity{
 					spriteNum = 2;
 				}
 				else if(spriteNum == 2) {
+					spriteNum = 3;
+				}
+				else if(spriteNum == 3) {
 					spriteNum = 1;
 				}
 				spriteCounter = 0;
@@ -125,6 +132,9 @@ public class Player extends Entity{
 			if(spriteNum == 2) {
 				image = up2;
 			}
+			if(spriteNum == 3) {
+				image = up3;
+			}
 			break;
 		case "down":
 			if(spriteNum == 1) {
@@ -132,6 +142,9 @@ public class Player extends Entity{
 			}
 			if(spriteNum == 2) {
 				image = down2;
+			}
+			if(spriteNum == 3) {
+				image = down3;
 			}
 			break;
 		case "left":
@@ -141,6 +154,9 @@ public class Player extends Entity{
 			if(spriteNum == 2) {
 				image = left2;
 			}
+			if(spriteNum == 3) {
+				image = left3;
+			}
 			break;
 		case "right":
 			if(spriteNum == 1) {
@@ -148,6 +164,9 @@ public class Player extends Entity{
 			}
 			if(spriteNum == 2) {
 				image = right2;
+			}
+			if(spriteNum == 3) {
+				image = right3;				
 			}
 			break;
 		}
