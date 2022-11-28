@@ -1,12 +1,10 @@
 package tile;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -15,23 +13,19 @@ import main.GamePanel;
 public class TileManager {
 	
 	GamePanel gp;
-	public Tile[] tile;
-	public int mapTileNum[][];
-//	public int num[];
+	Tile[] tile;
+	int mapTileNum[][];
 	
-	List<Integer>num = new ArrayList<Integer>(); 
 	
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		
-		tile = new Tile[2900];
+		tile = new Tile[2400];
 		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
 		
 		getTileImage();
 		loadMap("/maps/vilg.txt");
-		loadColl("/maps/village_collide.txt");
-		getCollision();
 	}
 	
 	public void loadMap(String filepath) {
@@ -64,40 +58,27 @@ public class TileManager {
 		}
 	}
 	
-	public void loadColl(String filepath) {
-		try {
-			InputStream isColl = getClass().getResourceAsStream(filepath);
-			BufferedReader brColl = new BufferedReader(new InputStreamReader(isColl));
-			String lineString = brColl.readLine();
-			
-			int cek =0;
-			
-			String[] numbers;
-			numbers = lineString.split(" ");
-			for(String nums: numbers) {
-//				num[cek] =  new int(Integer.parseInt(nums));
-				num.add(Integer.parseInt(nums));
-				if(num.get(cek) == 1523) {
-					break;
-				}
-				cek++;
-			}
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void getCollision() {
-		for(int i=0;i<num.size();i++) {
-			int getCol;
-			getCol = num.get(i);
-			tile[getCol].collision = true;
-		}
-	}
-	
 	public void getTileImage() {
-		try {		
+		try {
+			
+//			tile[0] = new Tile();
+//			tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
+//			
+//			tile[1] = new Tile();
+//			tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
+//			
+//			tile[2] = new Tile();
+//			tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+//			
+//			tile[3] =  new Tile();
+//			tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/earth.png"));
+//			
+//			tile[4] =  new Tile();
+//			tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
+//			
+//			tile[5] =  new Tile();
+//			tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/sand.png"));			
+			
 			for(int i=0;i<2304;i++) {
 				String pathString = "/tiles/villagemap_" + i + ".png";
 				tile[i] = new Tile();
@@ -109,9 +90,16 @@ public class TileManager {
 		}
 	}
 	
-	public void draw(Graphics2D g2) {	
+	public void draw(Graphics2D g2) {
+		// this is'nt efective
+//		g2.drawImage(tile[0].image, 0, 0, gp.screenWidth, gp.screenHeight, null);
+//		g2.drawImage(tile[1].image, 48, 0, gp.tileSize, gp.tileSize, null);
+//		g2.drawImage(tile[2].image, 96, 0, gp.tileSize, gp.tileSize, null);
+//		
 		int worldCol = 0;
 		int worldRow = 0;
+//		int x = 0;
+//		int y = 0;
 		
 		while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
 			
@@ -122,16 +110,19 @@ public class TileManager {
 			int screenX = worldX - gp.player.worldX + gp.player.screenX;
 			int screenY = worldY - gp.player.worldY + gp.player.screenY;
 			
-			if(worldX + gp.tileSize> gp.player.worldX - gp.player.screenX &&
-					worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-					worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-					worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+			if(worldX > gp.player.worldX - gp.player.screenX &&
+					worldX < gp.player.worldX + gp.player.screenX &&
+					worldY > gp.player.worldY - gp.player.screenY &&
+					worldY < gp.player.worldY + gp.player.screenY) {
 				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);				
 			}
 			worldCol++;
+//			x += gp.tileSize;
 			if(worldCol == gp.maxWorldCol) {
 				worldCol = 0;
+//				x = 0;
 				worldRow++;
+//				y += gp.tileSize;
 			}
 		}
 	}
