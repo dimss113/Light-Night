@@ -11,26 +11,29 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
+import main.GameSettings;
+import entity.Entity;
 
 public class TileManager {
 	
 	GamePanel gp;
+	GameSettings gs;
 	public Tile[] tile;
 	public int mapTileNum[][];
 //	public int num[];
 	
 	List<Integer>num = new ArrayList<Integer>(); 
 	
-	public TileManager(GamePanel gp) {
+	public TileManager(GamePanel gp, GameSettings gs, int status, int size, String file, String fileCollide) {
 		this.gp = gp;
+		this.gs = gs;
 		
 		tile = new Tile[2900];
-		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
+		mapTileNum = new int[gs.getMaxWorldCol()][gs.getMaxWorldRow()];
 		
-		
-		getTileImage();
-		loadMap("/maps/vilg.txt");
-		loadColl("/maps/village_collide.txt");
+		getTileImage(size, status);
+		loadMap(file);
+		loadColl(fileCollide);
 		getCollision();
 	}
 	
@@ -42,17 +45,17 @@ public class TileManager {
 			int col = 0; 
 			int row = 0;
 			
-			while(col < gp.maxWorldCol && row < gp.maxWorldRow) {
+			while(col < gs.getMaxWorldCol() && row < gs.getMaxWorldRow()) {
 				String lineString = br.readLine();
 				
-				while(col < gp.maxWorldCol) {
+				while(col < gs.getMaxWorldCol()) {
 					String numbers[] = lineString.split(" ");
 					int num = Integer.parseInt(numbers[col]);
 					
 					mapTileNum[col][row] = num;
 					col++;
 				}
-				if(col == gp.maxWorldCol) {
+				if(col == gs.getMaxWorldCol()) {
 					col = 0;
 					row++;
 				}
@@ -96,10 +99,25 @@ public class TileManager {
 		}
 	}
 	
-	public void getTileImage() {
+	public void getTileImage(int num, int status) {
 		try {		
-			for(int i=0;i<2304;i++) {
-				String pathString = "/tiles/villagemap_" + i + ".png";
+			for(int i=0;i<num;i++) {
+				String pathString = null;
+				if(status == 1) {
+					pathString = "/tiles/villagemap_" + i + ".png";
+				}
+				else if(status == 2) {
+					pathString = "/tiles/home_" + i + ".png";
+				}
+				
+				else if(status == 3) {
+					pathString = "/tiles/cave01_" + i + ".png";
+				}
+				
+				else if(status == 4) {
+					pathString = "/tiles/cave02_" + i + ".png";
+				}
+				
 				tile[i] = new Tile();
 				tile[i].image = ImageIO.read(getClass().getResourceAsStream(pathString));
 			}
@@ -113,23 +131,23 @@ public class TileManager {
 		int worldCol = 0;
 		int worldRow = 0;
 		
-		while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
+		while(worldCol < gs.getMaxWorldCol() && worldRow < gs.getMaxWorldRow()) {
 			
 			int tileNum = mapTileNum[worldCol][worldRow];
 			
-			int worldX =  worldCol * gp.tileSize; 
-			int worldY = worldRow * gp.tileSize;
+			int worldX =  worldCol * gs.getTileSize(); 
+			int worldY = worldRow * gs.getTileSize();
 			int screenX = worldX - gp.player.worldX + gp.player.screenX;
 			int screenY = worldY - gp.player.worldY + gp.player.screenY;
 			
-			if(worldX + gp.tileSize> gp.player.worldX - gp.player.screenX &&
-					worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-					worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-					worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);				
+			if(worldX + gs.getTileSize()> gp.player.worldX - gp.player.screenX &&
+					worldX - gs.getTileSize() < gp.player.worldX + gp.player.screenX &&
+					worldY + gs.getTileSize() > gp.player.worldY - gp.player.screenY &&
+					worldY - gs.getTileSize() < gp.player.worldY + gp.player.screenY) {
+				g2.drawImage(tile[tileNum].image, screenX, screenY, gs.getTileSize(), gs.getTileSize(), null);				
 			}
 			worldCol++;
-			if(worldCol == gp.maxWorldCol) {
+			if(worldCol == gs.getMaxWorldCol()) {
 				worldCol = 0;
 				worldRow++;
 			}

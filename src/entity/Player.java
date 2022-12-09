@@ -10,38 +10,50 @@ import java.util.PrimitiveIterator.OfDouble;
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
+import main.GameSettings;
+import main.HomeSettings;
 import main.KeyHandler;
 
 public class Player extends Entity{
 	GamePanel gp;
 	KeyHandler keyH;
+	GameSettings gs;
 	
 	public final int screenX;
 	public final int screenY;
+	public int initialPosX;
+	public int initialPosY;
+	public int tileSize;
 	
-	public Player(GamePanel gp, KeyHandler keyH) {
+	
+	
+	public Player(GamePanel gp, GameSettings gs, KeyHandler keyH, int initialposX, int initialposY) {
 		this.gp = gp;
+		this.gs = gs;
 		this.keyH = keyH;
-		
-		screenX = gp.screenWidth/2 - (gp.tileSize/2);
-		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		this.initialPosX = initialposX;
+		this.initialPosY = initialposY;
+		screenX = gs.getScreenWidth()/2 - (gs.getTileSize()/2);
+		screenY = gs.getScreenHeight()/2 - (gs.getTileSize()/2);
 		
 		solidArea = new Rectangle();
 		solidArea.x = 0;
 		solidArea.y = 0;
-		solidArea.width = gp.tileSize - 16;
-		solidArea.height = gp.tileSize - 16;
+		solidArea.width = gs.getTileSize() - 16;
+		solidArea.height = gs.getTileSize() - 16;
+		this.tileSize = gs.getTileSize();
 		
 		
 		setDefaultValues();
-		getPlayerImage();
+		getPlayerImage(); 
 	}
 	
+
 	public void setDefaultValues() {
-//		worldX = gp.tileSize * 23; // starting position (center of screen)
-//		worldY = gp.tileSize * 21; // starting position (center of screen)
-		worldX = gp.tileSize * 36;
-		worldY = gp.tileSize * 35;
+		worldX = tileSize * initialPosX; // starting position (center of screen)
+		worldY = tileSize * initialPosY; // starting position (center of screen)
+//		worldX = gp.tileSize * 36;
+//		worldY = gp.tileSize * 35;
 		speed = 4;
 		direction = "down";
 	}
@@ -170,6 +182,6 @@ public class Player extends Entity{
 			}
 			break;
 		}
-		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, screenX, screenY, gs.getTileSize(), gs.getTileSize(), null);
 	}
 }

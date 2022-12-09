@@ -4,62 +4,35 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.nio.file.FileSystemNotFoundException;
-import java.util.Currency;
-import java.util.function.LongBinaryOperator;
 
 import javax.swing.JPanel;
 
 import entity.Player;
 import tile.TileManager;
 
-public class GamePanel extends JPanel implements Runnable{
-	// Screen Settings
+public class GamePanel extends JPanel implements Runnable {
 	
-	final int originalTileSize = 16; // 16 x 16 tile
-	final int scale = 3;
-	
-	public final int tileSize = originalTileSize * scale;
-	
-	public final int maxScreenCol = 16; // 16 -> ukuran asli 
-	public final int maxScreenRow = 12; // 12 -> ukuran asli
-	public final int screenWidth = tileSize * maxScreenCol; //768 px
-	public final int screenHeight = tileSize * maxScreenRow; //576 px
-	
-	// world settings
-	public final int maxWorldCol = 64;
-	public final int maxWorldRow = 36;
-	public final int worldWidth = tileSize * maxWorldCol;
-	public final int worldHeight = tileSize * maxScreenRow;
-	
+	GameSettings gs = new VillageSettings();	
 	KeyHandler keyH = new KeyHandler();
 	
-	TileManager tileM = new TileManager(this);
+	TileManager tileM = new TileManager(this, gs, gs.getStatus(), gs.getMaxCol(), gs.getFile(), gs.getFileCol());
 	
 	Thread gameThread;
 	
-	public CollisionChecker cChecker = new CollisionChecker(this);
+	public CollisionChecker cChecker = new CollisionChecker(this, gs);
 	
-	public Player player = new Player(this, keyH);
-	
+	public Player player = new Player(this, gs ,keyH, gs.getPlayerX(), gs.getPlayerY());
 	
 	int FPS = 60;
 	
-	// set player default position
-	int playerX = 100;
-	int playerY = 100;
-	int playerSpeed = 4;
-	
-	
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		this.setPreferredSize(new Dimension(gs.getScreenWidth(), gs.getScreenHeight()));
 		this.setBackground(Color.black);
 		
 		// if set to true, all the drawing from this component will be done in an offscreen painting buffere
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH);
 		this.setFocusable(true);
-	
 	}
 	
 	public void startGameThread() {
@@ -99,7 +72,6 @@ public class GamePanel extends JPanel implements Runnable{
 //			}
 //		}
 //	}
-	
 	public void run() {
 		double drawInterval = 1000000000/FPS;
 		double delta = 0;
@@ -144,6 +116,8 @@ public class GamePanel extends JPanel implements Runnable{
 		player.update();
 	}
 	
+	
+	
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
@@ -156,5 +130,4 @@ public class GamePanel extends JPanel implements Runnable{
 		player.draw(g2);
 		g2.dispose();
 	}
-	
 }
