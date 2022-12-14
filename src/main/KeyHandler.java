@@ -6,7 +6,14 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener{
 	
 	public boolean upPressed, downPressed, leftPressed, rightPressed;
+	public boolean xPressed, zPressed;
+	public boolean checkDrawTime;
 	
+	GamePanel gp;
+	
+	public KeyHandler(GamePanel gp) {
+		this.gp = gp;
+	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -30,7 +37,30 @@ public class KeyHandler implements KeyListener{
 		if(code == KeyEvent.VK_D) {
 			rightPressed = true;
 		}
+		if(code == KeyEvent.VK_X) {
+			xPressed = true;
+		}
+		if(code == KeyEvent.VK_Z) {
+			zPressed = true;
+		}
+		if(code == KeyEvent.VK_P) {
+			if(gp.gameState == gp.playState) {
+				gp.gameState = gp.pauseState;
+			}
+			else if(gp.gameState == gp.pauseState) {
+				gp.gameState = gp.playState;
+			}
+		}
 		
+		
+		// DEBUG draw time
+		if(code == KeyEvent.VK_T) {
+			if(checkDrawTime == false) {
+				checkDrawTime = true;
+			}else if(checkDrawTime == true) {
+				checkDrawTime = false;
+			}
+		}
 	}
 
 	@Override
@@ -49,6 +79,12 @@ public class KeyHandler implements KeyListener{
 		if(code == KeyEvent.VK_D) {
 			rightPressed = false;
 		}		
+		if(code == KeyEvent.VK_X) {
+			xPressed = false;
+		}
+		if(code == KeyEvent.VK_Z) {
+			zPressed = false;
+		}
 	}
 	
 }

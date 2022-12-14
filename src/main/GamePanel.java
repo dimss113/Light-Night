@@ -8,14 +8,26 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import environment.EnvironmentManager;
 import tile.TileManager;
+import tools.ToolContainer;
 
 public class GamePanel extends JPanel implements Runnable {
 	
-	GameSettings gs = new VillageSettings();	
-	KeyHandler keyH = new KeyHandler();
+	public final int vilgMap = 1;
+	public final int caveMap1 = 2;
+	public final int caveMap2 = 3;
+	public final int homeMap = 4;
+	
+	public int map = vilgMap;
+	GameSettings gs = new VillageSettings();
+	
+
+	KeyHandler keyH = new KeyHandler(this);
 	
 	TileManager tileM = new TileManager(this, gs, gs.getStatus(), gs.getMaxCol(), gs.getFile(), gs.getFileCol());
+	
+	EnvironmentManager eManager = new EnvironmentManager(this, gs);
 	
 	Thread gameThread;
 	
@@ -23,9 +35,25 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public Player player = new Player(this, gs ,keyH, gs.getPlayerX(), gs.getPlayerY());
 	
+	public int gameState;
+	public final int playState = 1;
+	public final int pauseState = 2;
+	
+	// Entity AND OBJECT
+	Sound music = new Sound();
+	Sound se = new Sound();
+	
+	// FOR TOOLS ONLY
+	public ToolContainer tool[] = new ToolContainer[100]; // can contain 12 tools
+	public AssetSetter aSetter = new AssetSetter(this, gs);
+	
+	public UI ui = new UI(this, gs);
+	public SubPanel subP = new SubPanel(this);
+	
 	int FPS = 60;
 	
 	public GamePanel() {
+
 		this.setPreferredSize(new Dimension(gs.getScreenWidth(), gs.getScreenHeight()));
 		this.setBackground(Color.black);
 		
@@ -35,43 +63,24 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 	
+	public void setMap(GameSettings gs, int index) {
+		
+	}
+	
+	public void setupGame() {
+		aSetter.setObject();
+		eManager.setup();
+		playMusic(0);
+		gameState = playState;
+	}
+	
 	public void startGameThread() {
 		// passing this gamepanel class to gameThread
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
 	
-//	public void run() {
-//		
-//		double drawInterval = 1000000000/FPS; // draw screen 60 time per second
-//		double nextDrawTime = System.nanoTime() + drawInterval;
-//		
-//		
-//		
-//		// selama gameThread exist maka akan terus 
-//		while(gameThread != null) {
-////			System.out.println("Game loop is running");
-//				
-//			// 1. Update Char position
-//			// 2. Draw screen with updated information
-//			update();
-//			repaint();
-//			
-//			try {
-//				double remainingTime = nextDrawTime - System.nanoTime();
-//				remainingTime = remainingTime/1000000;
-//				if(remainingTime < 0) {
-//					remainingTime = 0;
-//				}
-//				
-//				Thread.sleep((long)remainingTime);
-//				nextDrawTime += drawInterval;
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+
 	public void run() {
 		double drawInterval = 1000000000/FPS;
 		double delta = 0;
@@ -101,33 +110,72 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void update() {
-//		if(keyH.upPressed == true) {
-//			playerY -= playerSpeed;
-//		}
-//		else if(keyH.downPressed ==  true) {
-//			playerY += playerSpeed;
-//		}else if(keyH.leftPressed == true) {
-//			playerX -= playerSpeed;
-//		}else if(keyH.rightPressed == true) {
-//			playerX += playerSpeed;
-//		}
-		
-		// replaced by this
 		player.update();
 	}
 	
 	
 	
-	public void paintComponent(Graphics g) {
+public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 //		g2.setColor(Color.white);
 //		g2.fillRect(playerX, playerY, tileSize, tileSize);
 		
+		// Debug stuff
+		long drawStart = 0;
+		if(keyH.checkDrawTime == true) {
+			drawStart = System.nanoTime();			
+		}
+		
+		
+		// this is tile
 		tileM.draw(g2);
 		// replaced by this
+		
+		// this is tool
+		for(int i=0;i<tool.length;i++) {
+			if(tool[i] != null) {
+				if(tool[i].showTool == true) {
+					tool[i].draw(g2, this, gs);					
+				}
+			}
+		}
+		
+		eManager.draw(g2);
+		
+		// this is player
+		subP.draw(g2);
 		player.draw(g2);
+		
+		ui.draw(g2);
+		
+		if(keyH.checkDrawTime == true) {
+			long drawEnd = System.nanoTime();
+			long passed = drawEnd - drawStart;
+			g2.setColor(Color.white);
+			g2.drawString("Draw Time: " + passed, 10, 400);
+			System.out.println("Draw Time: " + passed);			
+		}
+		
+		
 		g2.dispose();
+	}
+	
+	public void playMusic(int i) {
+		
+		music.setFile(i);
+		music.play();
+		music.loop();
+	}
+	
+	public void stopMusic() {
+		music.stop();
+	}
+	
+	// short music
+	public void playSE(int i) {
+		se.setFile(i);
+		se.play();
 	}
 }

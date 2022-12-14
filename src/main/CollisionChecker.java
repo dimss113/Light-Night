@@ -7,7 +7,7 @@ public class CollisionChecker {
 	GamePanel gp;
 	GameSettings gs;
 	
-	public int tileSize;
+	private int tileSize;
 	
 	public CollisionChecker(GamePanel gp, GameSettings gs) {
 		this.gp = gp;
@@ -16,7 +16,7 @@ public class CollisionChecker {
 		
 	}
 
-	public void checkTile(Entity entity) {
+public void checkTile(Entity entity) {
 		
 		int entityLeftWorldX = entity.worldX + entity.solidArea.x;
 		int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
@@ -64,6 +64,81 @@ public class CollisionChecker {
 			}
 			break;
 		}
+		
+	}
+	
+	public int checkObject(Entity entity, boolean player) {
+		
+		int index = 99999;
+		
+		for(int i = 0;i < gp.tool.length; i++) {
+			if(gp.tool[i] != null) {
+				// get entity solid area position
+				entity.solidArea.x = entity.worldX + entity.solidArea.x;
+				entity.solidArea.y = entity.worldY + entity.solidArea.y;
+				// get the tools solid area position
+				gp.tool[i].solidArea.x = gp.tool[i].worldX + gp.tool[i].solidArea.x;
+				gp.tool[i].solidArea.y = gp.tool[i].worldY + gp.tool[i].solidArea.y;
+			
+				switch(entity.direction) {
+				case "up":
+					entity.solidArea.y -= entity.speed;
+					if(entity.solidArea.intersects(gp.tool[i].solidArea)) {
+						System.out.println("up collision");
+						if(gp.tool[i].collision  ==  true) {
+							entity.collisionOn = true;
+						}
+						if(player == true) {
+							index = i;
+						}
+					}
+					break;
+				case "down":
+					System.out.println("masuk down coll");
+					entity.solidArea.y += entity.speed;
+					if(entity.solidArea.intersects(gp.tool[i].solidArea)) {
+						System.out.println("down collision");
+						if(gp.tool[i].collision  ==  true) {
+							entity.collisionOn = true;
+						}
+						if(player == true) {
+							index = i;
+						}
+					}					
+					break;
+				case "left":
+					entity.solidArea.x -= entity.speed;
+					if(entity.solidArea.intersects(gp.tool[i].solidArea)) {
+						System.out.println("left collision");
+						if(gp.tool[i].collision  ==  true) {
+							entity.collisionOn = true;
+						}
+						if(player == true) {
+							index = i;
+						}
+					}					
+					break;
+				case "right":
+					entity.solidArea.y += entity.speed;
+					if(entity.solidArea.intersects(gp.tool[i].solidArea)) {
+						System.out.println("right collision");
+						if(gp.tool[i].collision  ==  true) {
+							entity.collisionOn = true;
+						}
+						if(player == true) {
+							index = i;
+						}
+					}					
+					break;
+				}
+				entity.solidArea.x = entity.solidAreaDefaultX;
+				entity.solidArea.y = entity.solidAreaDefaultY;
+				gp.tool[i].solidArea.x = gp.tool[i].solidAreaDefaultX;
+				gp.tool[i].solidArea.y = gp.tool[i].solidAreaDefaultY;
+			}
+		}
+		
+		return index;
 		
 	}
 }

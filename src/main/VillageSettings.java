@@ -34,7 +34,7 @@ public class VillageSettings extends GameSettings{
 	
 	
 	private static int initialX = 36;
-	private static int initialY = 25;
+	private static int initialY = 34;
 	private static int status = 1;
 	private static int maxCol = 2304;
 	
