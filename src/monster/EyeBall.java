@@ -95,7 +95,7 @@ public class EyeBall extends Entity{
 			if(i > 50 && i <= 75 ) {
 				direction = "left";
 			}
-			if(i > 25 && i <= 50 ) {
+			if(i > 75 && i <= 100 ) {
 				direction = "right";
 			}
 			

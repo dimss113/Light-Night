@@ -59,7 +59,7 @@ public class KeyHandler implements KeyListener{
 		}
 		
 		if(code == KeyEvent.VK_E) {
-			if(gp.ui.hasKey == true && gp.player.frontDoor == true) {
+			if(gp.ui.hasKey == true && gp.player.frontHome == true) {
 					gp.curMap = 1;
 					gp.setGs(new HomeSettings());
 					System.out.println(gp.curMap);
@@ -74,10 +74,10 @@ public class KeyHandler implements KeyListener{
 					gp.cChecker = new CollisionChecker(gp, gp.getGs());
 					gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
 					
-					gp.player.frontDoor = false;
+					gp.player.frontHome = false;
 				}
 			
-			else if(gp.curMap == 1) {
+			else if(gp.curMap == 1 && gp.player.exitHome == true) {
 				gp.curMap = 0;
 				gp.setGs(new VillageSettings());
 				
@@ -93,33 +93,72 @@ public class KeyHandler implements KeyListener{
 				gp.aSetter = new AssetSetter(gp, gp.gs);
 				gp.setupGame();
 				
-				gp.player.frontDoor = false;
+				gp.player.exitHome = false;
 			}
 			
 			if(gp.player.frontCave == true) {
+				System.out.println("enter");
 				System.out.println(gp.curMap);
 				if(gp.curMap == 0) {
 					gp.curMap = 2;
 					gp.setGs(new Cave01Settings());
+					System.out.println(gp.curMap);
 				}
 				else if(gp.curMap == 2) {
 					gp.curMap = 3;
 					gp.setGs(new Cave02Settings());
+					System.out.println(gp.curMap);
 				}
 				
 				gp.tool = new ToolContainer[100]; // can contain 12 tools
 				
 				gp.monster = new Entity[100];
+			
+				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
+				gp.cChecker = new CollisionChecker(gp, gp.getGs());
+				gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
+				gp.ui = new UI(gp, gp.gs);
+				gp.subP = new SubPanel(gp);
+				gp.aSetter = new AssetSetter(gp, gp.gs);
+				gp.setupGame();
+				
+				gp.player.frontCave = false;
+			}
+			
+			if(gp.player.exitCave == true) {
+				System.out.println("exit");
+				System.out.println(gp.curMap);
+				int temp = gp.curMap;
+				if(gp.curMap == 2) {
+					gp.curMap = 0;
+					System.out.println(gp.curMap);
+					gp.setGs(new VillageSettings());
+				}
+				else if(gp.curMap == 3) {
+					gp.curMap = 2;
+					System.out.println(gp.curMap);
+					gp.setGs(new Cave01Settings());
+				}
+				
+				gp.tool = new ToolContainer[100]; // can contain 12 tools
+				
+				gp.monster = new Entity[100];
+			
+				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
+				gp.cChecker = new CollisionChecker(gp, gp.getGs());
+				if(temp == 2) {
+					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 2, 10);
+				}
+				else if(temp == 3) {
+					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 14, 1);
+				}
 				
 				gp.ui = new UI(gp, gp.gs);
 				gp.subP = new SubPanel(gp);
 				gp.aSetter = new AssetSetter(gp, gp.gs);
 				gp.setupGame();
-				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
-				gp.cChecker = new CollisionChecker(gp, gp.getGs());
-				gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
 				
-				gp.player.frontCave = false;
+				gp.player.exitCave = false;
 			}
 		}
 

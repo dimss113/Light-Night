@@ -19,8 +19,8 @@ public class Cave01Settings extends GameSettings{
 	private static int worldHeight = tileSize * maxScreenRow;
 	
 	
-	private static int initialX = 13;
-	private static int initialY = 13;
+	private static int initialX = 11;
+	private static int initialY = 12;
 	private static int status = 2;
 	private static int totalSize = 336;
 	

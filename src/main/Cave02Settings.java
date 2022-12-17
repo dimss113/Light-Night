@@ -20,7 +20,7 @@ public class Cave02Settings extends GameSettings{
 	
 	
 	private static int initialX = 7;
-	private static int initialY = 18;
+	private static int initialY = 17;
 	private static int status = 3;
 	private static int totalSize = 320;
 	

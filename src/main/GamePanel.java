@@ -70,8 +70,6 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 	
-	
-	
 	public void setupGame() {
 		aSetter.setObject();
 		aSetter.setMonster();

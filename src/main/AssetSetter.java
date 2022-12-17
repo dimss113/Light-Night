@@ -24,7 +24,9 @@ import tools.Sword;
 import tools.ToolBoots;
 import tools.Water;
 import tools.Well;
-import tools.exitHouse;
+import tools.exitCave;
+import tools.exitHome;
+
 
 public class AssetSetter {
 	
@@ -161,27 +163,132 @@ public class AssetSetter {
 			}
 		
 			if(gp.curMap == 1) {
-				gp.tool[0] = new HouseDoor();
-				gp.tool[0].worldX = 8 * tileSize;
-				gp.tool[0].worldY = 6 * tileSize;
+				gp.tool[0] = new exitHome();
+				gp.tool[0].worldX = 2 * tileSize;
+				gp.tool[0].worldY = 2 * tileSize;
+				
 			}
+			
 			
 			if(gp.curMap == 2) {
 				gp.tool[0] = new Cave02Door();
 				gp.tool[0].worldX = 14 * tileSize;
 				gp.tool[0].worldY = 1 * tileSize;
+				
+				gp.tool[1] = new exitCave();
+				gp.tool[1].worldX =  10 * tileSize;
+				gp.tool[1].worldY = 13 * tileSize;
+				
+				gp.tool[2] = new exitCave();
+				gp.tool[2].worldX =  11 * tileSize;
+				gp.tool[2].worldY = 13 * tileSize;
+				
+				gp.tool[3] = new exitCave();
+				gp.tool[3].worldX =  12 * tileSize;
+				gp.tool[3].worldY = 13 * tileSize;
+			}
+			
+			if(gp.curMap == 3) {
+				gp.tool[0] = new exitCave();
+				gp.tool[0].worldX =  7 * tileSize;
+				gp.tool[0].worldY = 19 * tileSize;
+				
+				gp.tool[1] = new exitCave();
+				gp.tool[1].worldX =  8 * tileSize;
+				gp.tool[1].worldY = 19 * tileSize;
+				
+				gp.tool[2] = new exitCave();
+				gp.tool[2].worldX =  6 * tileSize;
+				gp.tool[2].worldY = 19 * tileSize;
 			}
 		}
 	
 		public void setMonster() {
 			if(gp.curMap == 0) {
 				gp.monster[0] = new EyeBall(gp);
-				gp.monster[0].worldX = 32 * tileSize;
-				gp.monster[0].worldY = 28 * tileSize;
+				gp.monster[0].worldX = 7 * tileSize;
+				gp.monster[0].worldY = 32 * tileSize;
 				
 				gp.monster[1] = new EyeBall(gp);
 				gp.monster[1].worldX = 29 * tileSize;
 				gp.monster[1].worldY = 30 * tileSize;
+				
+				gp.monster[2] = new EyeBall(gp);
+				gp.monster[2].worldX = 17 * tileSize;
+				gp.monster[2].worldY = 26 * tileSize;
+				
+				gp.monster[3] = new EyeBall(gp);
+				gp.monster[3].worldX = 52 * tileSize;
+				gp.monster[3].worldY = 15 * tileSize;
+				
+				gp.monster[4] = new EyeBall(gp);
+				gp.monster[4].worldX = 28 * tileSize;
+				gp.monster[4].worldY = 27 * tileSize;
+				
+				gp.monster[5] = new EyeBall(gp);
+				gp.monster[5].worldX = 48 * tileSize;
+				gp.monster[5].worldY = 10 * tileSize;
+				
+				gp.monster[6] = new EyeBall(gp);
+				gp.monster[6].worldX =  53 * tileSize;
+				gp.monster[6].worldY = 21 * tileSize;
+				
+				gp.monster[7] = new EyeBall(gp);
+				gp.monster[7].worldX = 36 * tileSize;
+				gp.monster[7].worldY = 8 * tileSize;
+				
+				gp.monster[8] = new EyeBall(gp);
+				gp.monster[8].worldX = 32 * tileSize;
+				gp.monster[8].worldY = 4 * tileSize;
+				
+				gp.monster[9] = new EyeBall(gp);
+				gp.monster[9].worldX = 47 * tileSize;
+				gp.monster[9].worldY = 2 * tileSize;
+				
+				gp.monster[10] = new EyeBall(gp);
+				gp.monster[10].worldX = 53 * tileSize;
+				gp.monster[10].worldY = 3 * tileSize;
+				
+				gp.monster[11] = new EyeBall(gp);
+				gp.monster[11].worldX = 57 * tileSize;
+				gp.monster[11].worldY = 3 * tileSize;
+				
+				gp.monster[12] = new EyeBall(gp);
+				gp.monster[12].worldX = 20 * tileSize;
+				gp.monster[12].worldY = 16 * tileSize;
+				
+				gp.monster[13] = new EyeBall(gp);
+				gp.monster[13].worldX = 18 * tileSize;
+				gp.monster[13].worldY = 11 * tileSize;
+				
+				gp.monster[14] = new EyeBall(gp);
+				gp.monster[14].worldX = 17 * tileSize;
+				gp.monster[14].worldY = 8 * tileSize;
+				
+				gp.monster[15] = new EyeBall(gp);
+				gp.monster[15].worldX = 8 * tileSize;
+				gp.monster[15].worldY = 9 * tileSize;
+				
+				gp.monster[16] = new EyeBall(gp);
+				gp.monster[16].worldX = 7 * tileSize;
+				gp.monster[16].worldY = 15 * tileSize;
+				
+				gp.monster[17] = new EyeBall(gp);
+				gp.monster[17].worldX = 21 * tileSize;
+				gp.monster[17].worldY = 24 * tileSize;
+				
+				gp.monster[18] = new EyeBall(gp);
+				gp.monster[18].worldX = 23 * tileSize;
+				gp.monster[18].worldY = 10 * tileSize;
+				
+				gp.monster[19] = new EyeBall(gp);
+				gp.monster[19].worldX = 28 * tileSize;
+				gp.monster[19].worldY = 7 * tileSize;
+				
+				gp.monster[20] = new EyeBall(gp);
+				gp.monster[20].worldX = 46 * tileSize;
+				gp.monster[20].worldY = 11 * tileSize;
+				
 			}
 		}
 	}

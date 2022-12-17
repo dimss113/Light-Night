@@ -31,9 +31,10 @@ public class Player extends Entity{
 	public int fillBucket = 0;
 	public int count = 0;
 	public int prevPress = 0;
-	public boolean frontDoor = false;
+	public boolean frontHome = false;
 	public boolean exitHome = false;
 	public boolean frontCave = false;
+	public boolean exitCave = false;
 	
 	
 
@@ -428,13 +429,15 @@ public class Player extends Entity{
 			case "House Door": 
 				prevPress = 0;
 				gp.ui.showMessage("press e to enter house");
-				frontDoor = true;
+				frontHome = true;
+				exitHome = false;
 				break;
 				
-			case "Exit House":
+			case "Exit Home":
 				prevPress = 0;
-				gp.ui.showMessage("press e to exit house");
+				gp.ui.showMessage("press e to exit Cave");
 				exitHome = true;
+				frontHome = false;
 				break;
 				
 			case "Cave01 Door":
@@ -443,12 +446,16 @@ public class Player extends Entity{
 				frontCave = true;
 				break;
 			
-			case "Cave02 Door":
+				
+			case "Exit Cave":
 				prevPress = 0;
-				gp.ui.showMessage("press e to enter Cave");
-				frontCave = true;
+				gp.ui.showMessage("press e to exit Cave");
+				exitCave = true;
+				frontCave = false;
 				break;
+
 			}
+			
 		}
 		
 	}
