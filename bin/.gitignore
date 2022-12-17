@@ -1,8 +1,10 @@
 /tiles/
+/tools/
 /entity/
 /environment/
 /main/
+/monster/
 /tile/
-/tools/
-/maps/
+/object/
 /sounds/
+/maps/

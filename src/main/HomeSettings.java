@@ -31,21 +31,22 @@ public class HomeSettings extends GameSettings{
 	private static int maxWorldRow = 9;
 	private static int worldWidth = tileSize * maxWorldCol;
 	private static int worldHeight = tileSize * maxScreenRow;
+	
 	private static int initialX = 8;
-	private static int initialY = 8;
-	private static int status = 2;
-	private static int maxCol = 144;
+	private static int initialY = 7;
+	private static int status = 1;
+	private static int totalSize = 144;
 	
 	private static String file = "/maps/home.txt";
 	private static String fileCol = "/maps/home_collide.txt";
 			
 	// set player default position
-	int playerX = 100;
-	int playerY = 100;
+	int playerX ;
+	int playerY;
 	int playerSpeed = 4;
 
 	public HomeSettings() {
 		super(originalTileSize, scale, tileSize, maxScreenCol, maxScreenRow, screenWidth, screenHeight, maxWorldCol, maxWorldRow, 
-				worldWidth, worldHeight, initialX, initialY, status, maxCol ,file , fileCol);
+				worldWidth, worldHeight, initialX, initialY, status, totalSize ,file , fileCol);
 	}
 }

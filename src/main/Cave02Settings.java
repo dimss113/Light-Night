@@ -21,14 +21,14 @@ public class Cave02Settings extends GameSettings{
 	
 	private static int initialX = 7;
 	private static int initialY = 18;
-	private static int status = 4;
-	private static int maxCol = 320;
+	private static int status = 3;
+	private static int totalSize = 320;
 	
 	private static String file = "/maps/cave02.txt";
 	private static String fileCol = "/maps/cave02_collide.txt";
 	
 	public Cave02Settings() {
 		super(originalTileSize, scale, tileSize, maxScreenCol, maxScreenRow, screenWidth, screenHeight, maxWorldCol, maxWorldRow, 
-				worldWidth, worldHeight, initialX, initialY, status, maxCol ,file , fileCol);
+				worldWidth, worldHeight, initialX, initialY, status, totalSize, file, fileCol);
 	}
 }

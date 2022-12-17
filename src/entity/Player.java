@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -17,7 +18,7 @@ import main.KeyHandler;
 public class Player extends Entity{
 	GamePanel gp;
 	KeyHandler keyH;
-	GameSettings gs;
+	public GameSettings gs;
 	
 	public final int screenX;
 	public final int screenY;
@@ -30,10 +31,15 @@ public class Player extends Entity{
 	public int fillBucket = 0;
 	public int count = 0;
 	public int prevPress = 0;
+	public boolean frontDoor = false;
+	public boolean exitHome = false;
+	public boolean frontCave = false;
 	
 	
+
 	
 	public Player(GamePanel gp, GameSettings gs, KeyHandler keyH, int initialposX, int initialposY) {
+		super(gp);
 		this.gp = gp;
 		this.gs = gs;
 		this.keyH = keyH;
@@ -66,6 +72,9 @@ public class Player extends Entity{
 		speed = 3;
 		direction = "down";
 		removeObj = false;
+		
+		maxLife = 6;
+		curLife = maxLife;
 	}
 	
 	public void getPlayerImage() {
@@ -117,6 +126,10 @@ public class Player extends Entity{
 			collisionOn = false;
 			gp.cChecker.checkTile(this);
 			
+			//Check Monster Collision
+			int monsterInd = gp.cChecker.checkEntity(this, gp.monster);
+			contactMonster(monsterInd);
+			
 			// check tools collision
 			int objIndex = gp.cChecker.checkObject(this, true);
 			pickUpObject(objIndex);
@@ -152,6 +165,14 @@ public class Player extends Entity{
 				}
 				spriteCounter = 0;
 			}			
+		}
+		
+		if(invisible == true) {
+			invisibleCounter++;
+			if(invisibleCounter > 60) {
+				invisible = false;
+				invisibleCounter =0;
+			}
 		}
 		
 	}
@@ -403,8 +424,33 @@ public class Player extends Entity{
 					gp.ui.showMessage("you can use this book to remove the curse");					
 				}
 				break;
+				
+			case "House Door": 
+				prevPress = 0;
+				gp.ui.showMessage("press e to enter house");
+				frontDoor = true;
+				break;
+				
+			case "Exit House":
+				prevPress = 0;
+				gp.ui.showMessage("press e to exit house");
+				exitHome = true;
+				break;
+				
+			case "Cave01 Door":
+				prevPress = 0;
+				gp.ui.showMessage("press e to enter Cave");
+				frontCave = true;
+				break;
+			
+			case "Cave02 Door":
+				prevPress = 0;
+				gp.ui.showMessage("press e to enter Cave");
+				frontCave = true;
+				break;
 			}
 		}
+		
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -456,6 +502,22 @@ public class Player extends Entity{
 			}
 			break;
 		}
+		if(invisible == true) {
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+		
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+	}
+	
+	public void contactMonster(int i) {
+		if(i != 99999) {
+			if(invisible == false) {
+				curLife -= 1;
+				gp.playSE(5);
+				invisible = true;
+			}
+			
+		}
 	}
 }

@@ -16,8 +16,8 @@ import entity.Entity;
 
 public class TileManager {
 	
-	GamePanel gp;
-	GameSettings gs;
+	public GamePanel gp;
+	public GameSettings gs;
 	public Tile[] tile;
 	public int mapTileNum[][];
 //	public int num[];
@@ -103,18 +103,18 @@ public class TileManager {
 		try {		
 			for(int i=0;i<num;i++) {
 				String pathString = null;
-				if(status == 1) {
+				if(status == 0) {
 					pathString = "/tiles/villagemap_" + i + ".png";
 				}
-				else if(status == 2) {
+				else if(status == 1) {
 					pathString = "/tiles/home_" + i + ".png";
 				}
 				
-				else if(status == 3) {
+				else if(status == 2) {
 					pathString = "/tiles/cave01_" + i + ".png";
 				}
 				
-				else if(status == 4) {
+				else if(status == 3) {
 					pathString = "/tiles/cave02_" + i + ".png";
 				}
 				

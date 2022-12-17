@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
 import tile.TileManager;
@@ -14,18 +15,20 @@ import tools.ToolContainer;
 
 public class GamePanel extends JPanel implements Runnable {
 	
-	public final int vilgMap = 1;
-	public final int caveMap1 = 2;
-	public final int caveMap2 = 3;
-	public final int homeMap = 4;
+	public GameSettings getGs() {
+		return gs;
+	}
+
+	public void setGs(GameSettings gs) {
+		this.gs = gs;
+	}
 	
-	public int map = vilgMap;
 	GameSettings gs = new VillageSettings();
 	
 
 	KeyHandler keyH = new KeyHandler(this);
 	
-	TileManager tileM = new TileManager(this, gs, gs.getStatus(), gs.getMaxCol(), gs.getFile(), gs.getFileCol());
+	TileManager tileM = new TileManager(this, gs, gs.getStatus(), gs.getTotalSize(), gs.getFile(), gs.getFileCol());
 	
 	EnvironmentManager eManager = new EnvironmentManager(this, gs);
 	
@@ -46,10 +49,14 @@ public class GamePanel extends JPanel implements Runnable {
 	// FOR TOOLS ONLY
 	public ToolContainer tool[] = new ToolContainer[100]; // can contain 12 tools
 	public AssetSetter aSetter = new AssetSetter(this, gs);
+	public Entity monster[] = new Entity[100];
 	
 	public UI ui = new UI(this, gs);
 	public SubPanel subP = new SubPanel(this);
 	
+	
+	//MAP
+	public int curMap;
 	int FPS = 60;
 	
 	public GamePanel() {
@@ -63,12 +70,11 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 	
-	public void setMap(GameSettings gs, int index) {
-		
-	}
+	
 	
 	public void setupGame() {
 		aSetter.setObject();
+		aSetter.setMonster();
 		eManager.setup();
 		playMusic(0);
 		gameState = playState;
@@ -111,6 +117,12 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void update() {
 		player.update();
+		
+		for(int i=0; i < monster.length; i++) {
+			if(monster[i] != null) {
+				monster[i].update();
+			}
+		}
 	}
 	
 	
@@ -139,6 +151,13 @@ public void paintComponent(Graphics g) {
 				if(tool[i].showTool == true) {
 					tool[i].draw(g2, this, gs);					
 				}
+			}
+		}
+		
+
+		for(int i=0; i<monster.length; i++) {
+			if(monster[i] != null) {
+				monster[i].draw(g2);
 			}
 		}
 		

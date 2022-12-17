@@ -33,10 +33,10 @@ public class VillageSettings extends GameSettings{
 	private static int worldHeight = tileSize * maxScreenRow;
 	
 	
-	private static int initialX = 36;
-	private static int initialY = 34;
-	private static int status = 1;
-	private static int maxCol = 2304;
+	private static int initialX = 25;
+	private static int initialY = 20;
+	private static int status = 0;
+	private static int totalSize = 2304;
 	
 	private static String file = "/maps/vilg.txt";
 	private static String fileCol = "/maps/village_collide.txt";
@@ -49,7 +49,7 @@ public class VillageSettings extends GameSettings{
 	
 	public VillageSettings() {
 		super(originalTileSize, scale, tileSize, maxScreenCol, maxScreenRow, screenWidth, screenHeight, maxWorldCol, maxWorldRow, 
-				worldWidth, worldHeight, initialX, initialY, status, maxCol ,file , fileCol);
+				worldWidth, worldHeight, initialX, initialY, status, totalSize, file , fileCol);
 	}
 
 

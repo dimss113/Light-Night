@@ -37,14 +37,14 @@ public abstract class GameSettings{
 	private int playerY;
 	
 	private int status;
-	private int maxCol;
+	private int totalSize;
 	private String file;
 	private String fileCol;
 	
 	
 	public GameSettings(int originalTileSize, int scale, int tileSize, int maxScreenCol, int maxScreenRow, int screenWidth,
 			int screenHeight, int maxWorldCol, int maxWorldRow, int worldWidth, int worldHeight, int playerX, int playerY, 
-			int status, int maxCol, String file, String fileCol) {
+			int status, int totalSize, String file, String fileCol) {
 		this.originalTileSize = originalTileSize;
 		this.scale = scale;
 		this.tileSize = tileSize;
@@ -59,7 +59,7 @@ public abstract class GameSettings{
 		this.playerX = playerX;
 		this.playerY = playerY;
 		this.status = status;
-		this.maxCol = maxCol;
+		this.totalSize = totalSize;
 		this.file = file;
 		this.fileCol = fileCol;
 	}
@@ -173,13 +173,13 @@ public abstract class GameSettings{
 	}
 
 
-	public int getMaxCol() {
-		return maxCol;
+	public int getTotalSize() {
+		return totalSize;
 	}
 
 
-	public void setMaxCol(int maxCol) {
-		this.maxCol = maxCol;
+	public void setTotalSize(int totalSize) {
+		this.totalSize = totalSize;
 	}
 
 

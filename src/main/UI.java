@@ -17,11 +17,13 @@ import tools.BookOrbneon;
 import tools.BucketEmpty;
 import tools.BucketFull;
 import tools.Hammer;
+import tools.Heart;
 import tools.Key;
 import tools.Potion;
 import tools.ShovelTool;
 import tools.Sword;
 import tools.ToolBoots;
+import tools.ToolContainer;
 
 public class UI {
 
@@ -33,7 +35,7 @@ public class UI {
 	public String message = "";
 	int messageCounter = 0;
 	public boolean gameFinished = false;
-	public boolean hasKey = false;
+	public boolean hasKey = true;
 	public boolean hasShovel = false;
 	public boolean hasBoots = false;
 	public boolean hasSword = false;
@@ -44,6 +46,9 @@ public class UI {
 	public boolean showTextPanel = false;
 	public boolean hasBookOrbpurple = false;
 	public int tileSize;
+	
+	BufferedImage heartFull, heartHalf, heartBlank;
+	
 	
 	public UI(GamePanel gp, GameSettings gs) {
 		this.gp = gp;
@@ -77,12 +82,25 @@ public class UI {
 			e.printStackTrace();
 		}
 		
+		//Create Heart UI
+		ToolContainer heart = new Heart();
+		heartFull = resizeImage(heart.image, gp.getGs().getTileSize(), gp.getGs().getTileSize());
+		heartHalf = resizeImage(heart.image2, gp.getGs().getTileSize(), gp.getGs().getTileSize());
+		heartBlank = resizeImage(heart.image3, gp.getGs().getTileSize(), gp.getGs().getTileSize());
 	}
 
 	public void showMessage(String text) {
 		message = text;
 		messageOn = true;
 		showTextPanel = true;
+	}
+	
+	BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+	    BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+	    Graphics2D graphics2D = resizedImage.createGraphics();
+	    graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+	    graphics2D.dispose();
+	    return resizedImage;
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -92,7 +110,7 @@ public class UI {
 		g2.drawImage(hammerImage, tileSize/2 + 50, tileSize/2 - 20, tileSize/2, tileSize, null);
 		g2.drawString("x " + gp.player.hasAxe, 50, 30);
 		g2.drawString("x " + gp.player.hasHammer, 50 + tileSize/2 + 25, 30);
-		
+		drawPlayerLife(g2);
 		if(gp.ui.hasBookOrbneon == true) {
 			g2.drawImage(bookOrbneonImage, 544, tileSize/2 - 10, tileSize/2, tileSize/2, null);
 		}
@@ -145,6 +163,35 @@ public class UI {
 				message = "";
 			}
 		}
+	}
+	
+	public void drawPlayerLife(Graphics2D g2) {
+		
+		int x = 10;
+		int y = gp.getGs().getTileSize() + 10;
+		
+		
+		for(int i=0; i< gp.player.maxLife/2; i++) {
+			g2.drawImage(heartBlank, x, y, null);
+			x += gp.getGs().getTileSize();
+		}
+		
+		//RESET
+		x = 10;
+		y = gp.getGs().getTileSize() + 10;
+		
+
+		for(int i=0; i < gp.player.curLife/2 ; i++) {
+			g2.drawImage(heartFull, x, y, null);
+			x += gp.getGs().getTileSize();
+		}
+		
+		if(gp.player.curLife % 2 == 1) {
+		
+			g2.drawImage(heartHalf, x, y, null);
+		}
+		
+		
 	}
 }
 
