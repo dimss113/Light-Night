@@ -11,14 +11,17 @@ import tools.ToolContainer;
 
 public class KeyHandler implements KeyListener{
 	
-	public boolean upPressed, downPressed, leftPressed, rightPressed;
+	public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
 	public boolean xPressed, zPressed;
 	public boolean checkDrawTime;
+	
+	Entity entity;
 	
 	GamePanel gp;
 	
 	public KeyHandler(GamePanel gp) {
 		this.gp = gp;
+		entity = new Entity(gp);
 	}
 	
 	@Override
@@ -31,143 +34,288 @@ public class KeyHandler implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
 		
-		if(code == KeyEvent.VK_W) {
-			upPressed = true;
-		}
-		if(code == KeyEvent.VK_S) {
-			downPressed = true;
-		}
-		if(code == KeyEvent.VK_A) {
-			leftPressed = true;
-		}
-		if(code == KeyEvent.VK_D) {
-			rightPressed = true;
-		}
-		if(code == KeyEvent.VK_X) {
-			xPressed = true;
-		}
-		if(code == KeyEvent.VK_Z) {
-			zPressed = true;
-		}
-		if(code == KeyEvent.VK_P) {
-			if(gp.gameState == gp.playState) {
-				gp.gameState = gp.pauseState;
+		// TITLE STATE
+		if(gp.gameState == gp.titleState) {
+			if(code == KeyEvent.VK_W) {
+				gp.ui.commandNum--;
+				if(gp.ui.commandNum < 0) {
+					gp.ui.commandNum = 2;
+				}
 			}
-			else if(gp.gameState == gp.pauseState) {
-				gp.gameState = gp.playState;
+			if(code == KeyEvent.VK_S) {
+				gp.ui.commandNum++;
+				if(gp.ui.commandNum > 2) {
+					gp.ui.commandNum = 0;
+				}
+			}
+			if(code == KeyEvent.VK_ENTER) {
+				switch(gp.ui.commandNum) {
+				case 0:
+					gp.gameState = gp.playState;
+					gp.playMusic(0);
+					break;
+				case 1:
+					gp.gameState = gp.playState;
+					gp.playMusic(0);
+					break;
+				case 2:
+					System.exit(0);
+					break;
+				}
 			}
 		}
 		
-		if(code == KeyEvent.VK_E) {
-			if(gp.ui.hasKey == true && gp.player.frontHome == true) {
-					gp.curMap = 1;
-					gp.setGs(new HomeSettings());
-					System.out.println(gp.curMap);
+		// PLAY STATE
+		if(gp.gameState == gp.playState) {
+			if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+				upPressed = true;
+			}
+			if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+				downPressed = true;
+			}
+			if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+				leftPressed = true;
+			}
+			if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+				rightPressed = true;
+			}
+			if(code == KeyEvent.VK_X) {
+				xPressed = true;
+			}
+			if(code == KeyEvent.VK_Z) {
+				zPressed = true;
+			}
+			if(code == KeyEvent.VK_SPACE || code ==  KeyEvent.VK_PAUSE || code == KeyEvent.VK_P) {
+				gp.gameState = gp.pauseState;
+			}
+			
+			if(code == KeyEvent.VK_ENTER) {
+				enterPressed = true;
+			}
+			if(code == KeyEvent.VK_ESCAPE) {
+				gp.gameState = gp.optionState;
+			}
+			
+			if(code == KeyEvent.VK_E) {
+				if(gp.ui.hasKey == true && gp.player.frontHome == true) {
+						gp.curMap = 1;
+						gp.setGs(new HomeSettings());
+						System.out.println(gp.curMap);
+						gp.tool = new ToolContainer[100]; // can contain 12 tools
+						
+						gp.monster = new Entity[100];
+						
+						gp.ui = new UI(gp, gp.gs);
+						
+						gp.aSetter = new AssetSetter(gp, gp.gs);
+						gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
+						gp.cChecker = new CollisionChecker(gp, gp.getGs());
+						gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
+						
+						gp.player.frontHome = false;
+					}
+				
+				else if(gp.curMap == 1 && gp.player.exitHome == true) {
+					gp.curMap = 0;
+					gp.setGs(new VillageSettings());
+					
 					gp.tool = new ToolContainer[100]; // can contain 12 tools
 					
 					gp.monster = new Entity[100];
 					
+					gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
+					gp.cChecker = new CollisionChecker(gp, gp.getGs());
+					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 23, 18);
 					gp.ui = new UI(gp, gp.gs);
-					
+					gp.subP = new SubPanel(gp);
 					gp.aSetter = new AssetSetter(gp, gp.gs);
+					gp.setupGame();
+					
+					gp.player.exitHome = false;
+				}
+				
+				if(gp.player.frontCave == true) {
+					System.out.println("enter");
+					System.out.println(gp.curMap);
+					if(gp.curMap == 0) {
+						gp.curMap = 2;
+						gp.setGs(new Cave01Settings());
+						System.out.println(gp.curMap);
+					}
+					else if(gp.curMap == 2) {
+						gp.curMap = 3;
+						gp.setGs(new Cave02Settings());
+						System.out.println(gp.curMap);
+					}
+					
+					gp.tool = new ToolContainer[100]; // can contain 12 tools
+					
+					gp.monster = new Entity[100];
+				
 					gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
 					gp.cChecker = new CollisionChecker(gp, gp.getGs());
 					gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
+					gp.ui = new UI(gp, gp.gs);
+					gp.subP = new SubPanel(gp);
+					gp.aSetter = new AssetSetter(gp, gp.gs);
+					gp.setupGame();
 					
-					gp.player.frontHome = false;
+					gp.player.frontCave = false;
 				}
-			
-			else if(gp.curMap == 1 && gp.player.exitHome == true) {
-				gp.curMap = 0;
-				gp.setGs(new VillageSettings());
 				
-				gp.tool = new ToolContainer[100]; // can contain 12 tools
-				
-				gp.monster = new Entity[100];
-				
-				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
-				gp.cChecker = new CollisionChecker(gp, gp.getGs());
-				gp.player = new Player(gp, gp.getGs() ,gp.keyH, 23, 18);
-				gp.ui = new UI(gp, gp.gs);
-				gp.subP = new SubPanel(gp);
-				gp.aSetter = new AssetSetter(gp, gp.gs);
-				gp.setupGame();
-				
-				gp.player.exitHome = false;
-			}
-			
-			if(gp.player.frontCave == true) {
-				System.out.println("enter");
-				System.out.println(gp.curMap);
-				if(gp.curMap == 0) {
-					gp.curMap = 2;
-					gp.setGs(new Cave01Settings());
+				if(gp.player.exitCave == true) {
+					System.out.println("exit");
 					System.out.println(gp.curMap);
+					int temp = gp.curMap;
+					if(gp.curMap == 2) {
+						gp.curMap = 0;
+						System.out.println(gp.curMap);
+						gp.setGs(new VillageSettings());
+					}
+					else if(gp.curMap == 3) {
+						gp.curMap = 2;
+						System.out.println(gp.curMap);
+						gp.setGs(new Cave01Settings());
+					}
+					
+					gp.tool = new ToolContainer[100]; // can contain 12 tools
+					
+					gp.monster = new Entity[100];
+				
+					gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
+					gp.cChecker = new CollisionChecker(gp, gp.getGs());
+					if(temp == 2) {
+						gp.player = new Player(gp, gp.getGs() ,gp.keyH, 2, 10);
+					}
+					else if(temp == 3) {
+						gp.player = new Player(gp, gp.getGs() ,gp.keyH, 14, 1);
+					}
+					
+					gp.ui = new UI(gp, gp.gs);
+					gp.subP = new SubPanel(gp);
+					gp.aSetter = new AssetSetter(gp, gp.gs);
+					gp.setupGame();
+					
+					gp.player.exitCave = false;
+					}
 				}
-				else if(gp.curMap == 2) {
-					gp.curMap = 3;
-					gp.setGs(new Cave02Settings());
-					System.out.println(gp.curMap);
+			// DEBUG draw time
+			if(code == KeyEvent.VK_T) {
+				if(checkDrawTime == false) {
+					checkDrawTime = true;
+				}else if(checkDrawTime == true) {
+					checkDrawTime = false;
 				}
-				
-				gp.tool = new ToolContainer[100]; // can contain 12 tools
-				
-				gp.monster = new Entity[100];
-			
-				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
-				gp.cChecker = new CollisionChecker(gp, gp.getGs());
-				gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
-				gp.ui = new UI(gp, gp.gs);
-				gp.subP = new SubPanel(gp);
-				gp.aSetter = new AssetSetter(gp, gp.gs);
-				gp.setupGame();
-				
-				gp.player.frontCave = false;
-			}
-			
-			if(gp.player.exitCave == true) {
-				System.out.println("exit");
-				System.out.println(gp.curMap);
-				int temp = gp.curMap;
-				if(gp.curMap == 2) {
-					gp.curMap = 0;
-					System.out.println(gp.curMap);
-					gp.setGs(new VillageSettings());
-				}
-				else if(gp.curMap == 3) {
-					gp.curMap = 2;
-					System.out.println(gp.curMap);
-					gp.setGs(new Cave01Settings());
-				}
-				
-				gp.tool = new ToolContainer[100]; // can contain 12 tools
-				
-				gp.monster = new Entity[100];
-			
-				gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
-				gp.cChecker = new CollisionChecker(gp, gp.getGs());
-				if(temp == 2) {
-					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 2, 10);
-				}
-				else if(temp == 3) {
-					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 14, 1);
-				}
-				
-				gp.ui = new UI(gp, gp.gs);
-				gp.subP = new SubPanel(gp);
-				gp.aSetter = new AssetSetter(gp, gp.gs);
-				gp.setupGame();
-				
-				gp.player.exitCave = false;
 			}
 		}
+		
 
-		// DEBUG draw time
-		if(code == KeyEvent.VK_T) {
-			if(checkDrawTime == false) {
-				checkDrawTime = true;
-			}else if(checkDrawTime == true) {
-				checkDrawTime = false;
+		// PAUSE STATE
+		else if(gp.gameState == gp.pauseState) {
+			if(code == KeyEvent.VK_P || code == KeyEvent.VK_SPACE || code == KeyEvent.VK_PAUSE) {
+				gp.gameState = gp.playState;
+			}
+		}
+		
+		// DIALOG STATE	
+		else if(gp.gameState == gp.dialogState) {
+			if(code == KeyEvent.VK_ENTER) {
+				gp.gameState = gp.playState;
+//				entity.increaseDialogIndex();
+			}
+//			if(code == KeyEvent.VK_SPACE) {
+//				gp.gameState = gp.playState;
+//			}
+		}
+		
+		// OPTION STATE
+		else if(gp.gameState == gp.optionState) {
+			optionState(code);
+		}
+		
+		
+			
+		if(gp.gameState == gp.gameOverState) {
+			if(code == KeyEvent.VK_UP) {
+				gp.ui.commandNum--;
+				if(gp.ui.commandNum < 0) {
+					gp.ui.commandNum = 1;
+				}
+				
+				gp.playSE(6);
+			}
+			
+			if(code == KeyEvent.VK_DOWN) {
+				gp.ui.commandNum++;
+				if(gp.ui.commandNum > 1) {
+					gp.ui.commandNum = 0;
+				}
+				
+				gp.playSE(6);
+			}
+			
+			if(code == KeyEvent.VK_ENTER) {
+				if(gp.ui.commandNum == 0) {
+					gp.gameState = gp.playState;
+					gp.playSE(7);
+					gp.retry();
+				}
+				
+				if(gp.ui.commandNum == 1) {
+					
+			}
+		}
+	}
+}
+	
+	public void optionState(int code) {
+		if(code == KeyEvent.VK_ESCAPE) {
+			gp.gameState = gp.playState;
+		}
+		if(code == KeyEvent.VK_ENTER) {
+			enterPressed = true;
+		}
+		if(code == KeyEvent.VK_W) {
+			gp.ui.commandNum--;
+			gp.playSE(9);
+			if(gp.ui.commandNum < 0) {
+				gp.ui.commandNum = 5;
+			}
+		}
+		if(code == KeyEvent.VK_S) {
+			gp.ui.commandNum++;
+			gp.playSE(9);
+			if(gp.ui.commandNum > 5) {
+				gp.ui.commandNum = 0;
+			}
+		}
+		
+		if(code == KeyEvent.VK_A) {
+			if(gp.ui.subState == 0) {
+				if(gp.ui.commandNum == 1 && gp.music.volumeScale > 0) {
+					gp.music.volumeScale--;
+					gp.music.checkVolume();
+					gp.playSE(9);
+				}
+				if(gp.ui.commandNum == 2 && gp.se.volumeScale > 0) {
+					gp.se.volumeScale--;
+					gp.playSE(9);
+				}
+
+			}
+		}
+		if(code == KeyEvent.VK_D) {
+			if(gp.ui.subState == 0) {
+				if(gp.ui.commandNum == 1 && gp.music.volumeScale < 5) {
+					gp.music.volumeScale++;
+					gp.music.checkVolume();
+					gp.playSE(2);
+				}
+				if(gp.ui.commandNum == 2 && gp.se.volumeScale < 5) {
+					gp.se.volumeScale++;
+					gp.playSE(2);
+				}
+				
 			}
 		}
 	}

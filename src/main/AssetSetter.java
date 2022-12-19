@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Arrays;
+import entity.*;
 import java.util.GregorianCalendar;
 
 import monster.EyeBall;
@@ -26,7 +27,6 @@ import tools.Water;
 import tools.Well;
 import tools.exitCave;
 import tools.exitHome;
-
 
 public class AssetSetter {
 	
@@ -164,8 +164,8 @@ public class AssetSetter {
 		
 			if(gp.curMap == 1) {
 				gp.tool[0] = new exitHome();
-				gp.tool[0].worldX = 2 * tileSize;
-				gp.tool[0].worldY = 2 * tileSize;
+				gp.tool[0].worldX = 8 * tileSize;
+				gp.tool[0].worldY = 8 * tileSize;
 				
 			}
 			
@@ -290,6 +290,13 @@ public class AssetSetter {
 				gp.monster[20].worldY = 11 * tileSize;
 				
 			}
+		}
+		
+		public void setNPC() {
+			gp.npc[0] = new Wizard(gp);
+			gp.npc[0].worldX = gp.gs.getTileSize() *36;
+			gp.npc[0].worldY = gp.gs.getTileSize() *30;
+			
 		}
 	}
 

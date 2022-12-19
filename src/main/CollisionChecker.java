@@ -189,18 +189,18 @@ public void checkTile(Entity entity) {
 			
 		}
 	
-	public boolean checkPlayer(Entity entity, Player player) {
+	public boolean checkPlayer(Entity entity, Entity npc) {
 		
 		int index = 99999;
 		boolean contactPlayer = false;
 
-		if(player != null) {
+		if(npc != null) {
 			// get entity solid area position
 			entity.solidArea.x = entity.worldX + entity.solidArea.x;
 			entity.solidArea.y = entity.worldY + entity.solidArea.y;
 			// get the tools solid area position
-			player.solidArea.x = player.worldX + player.solidArea.x;
-			player.solidArea.y = player.worldY + player.solidArea.y;
+			npc.solidArea.x = npc.worldX + npc.solidArea.x;
+			npc.solidArea.y = npc.worldY + npc.solidArea.y;
 		
 			switch(entity.direction) {
 			case "up":
@@ -217,18 +217,63 @@ public void checkTile(Entity entity) {
 				break;
 			}
 			
-			if(entity.solidArea.intersects(player.solidArea)) {
-				if(player != entity) {
+			if(entity.solidArea.intersects(npc.solidArea)) {
+				if(npc != entity) {
 					entity.collisionOn = true;
 					contactPlayer = true;
 				}
 			}	
 			entity.solidArea.x = entity.solidAreaDefaultX;
 			entity.solidArea.y = entity.solidAreaDefaultY;
-			player.solidArea.x = player.solidAreaDefaultX;
-			player.solidArea.y = player.solidAreaDefaultY;
+			npc.solidArea.x = npc.solidAreaDefaultX;
+			npc.solidArea.y = npc.solidAreaDefaultY;
 		}
 		return contactPlayer;
+	}
+	
+	public void checkPlayerNpc(Entity entity) {
+		// get entity solid area position
+		entity.solidArea.x = entity.worldX + entity.solidArea.x;
+		entity.solidArea.y = entity.worldY + entity.solidArea.y;
+		// get the tools solid area position
+		gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+		gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+	
+		switch(entity.direction) {
+		case "up":
+			entity.solidArea.y -= entity.speed;
+			if(entity.solidArea.intersects(gp.player.solidArea)) {
+				System.out.println("up collision");
+					entity.collisionOn = true;
+			}
+			break;
+		case "down":
+			System.out.println("masuk down coll");
+			entity.solidArea.y += entity.speed;
+			if(entity.solidArea.intersects(gp.player.solidArea)) {
+				System.out.println("down collision");
+					entity.collisionOn = true;
+			}					
+			break;
+		case "left":
+			entity.solidArea.x -= entity.speed;
+			if(entity.solidArea.intersects(gp.player.solidArea)) {
+				System.out.println("left collision");
+					entity.collisionOn = true;
+			}					
+			break;
+		case "right":
+			entity.solidArea.y += entity.speed;
+			if(entity.solidArea.intersects(gp.player.solidArea)) {
+				System.out.println("right collision");
+					entity.collisionOn = true;
+			}					
+			break;
+		}
+		entity.solidArea.x = entity.solidAreaDefaultX;
+		entity.solidArea.y = entity.solidAreaDefaultY;
+		gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+		gp.player.solidArea.y = gp.player.solidAreaDefaultY;		
 		
 	}
 		

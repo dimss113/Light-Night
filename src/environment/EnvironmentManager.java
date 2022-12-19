@@ -8,12 +8,13 @@ import main.GameSettings;
 
 public class EnvironmentManager {
 	GamePanel gp;
-	Lightning lightning;
+	public Lightning lightning;
 	GameSettings gs;
 	
 	public EnvironmentManager(GamePanel gp, GameSettings gs) {
 		this.gp = gp;
 		this.gs = gs;
+//		lightning = new Lightning(gp, gs, 320);
 	}
 	
 	public void setup() {
@@ -21,6 +22,7 @@ public class EnvironmentManager {
 	}
 	
 	public void draw(Graphics2D g2) {
+//		setup();
 		lightning.draw(g2);
 	}
 }
