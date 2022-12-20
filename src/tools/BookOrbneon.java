@@ -8,7 +8,7 @@ public class BookOrbneon extends ToolContainer{
 
 	public BookOrbneon() {
 		name = "Book Orbneon";
-		showTool = false;
+		showTool = true;
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/tools/book-orbneon.png"));
 		}catch(IOException e) {

@@ -19,22 +19,18 @@ import environment.*;
 
 public class GamePanel extends JPanel implements Runnable {
 	
-	public GameSettings getGs() {
-		return gs;
-	}
-
-	public void setGs(GameSettings gs) {
-		this.gs = gs;
-	}
 	
-	public GameSettings gs = new VillageSettings();
 	
+	public GameSettings vilgGS = new VillageSettings();
+	public GameSettings HomeGS = new HomeSettings();
+	public GameSettings cave01GS = new Cave01Settings();
+	public GameSettings cave02GS = new Cave02Settings();
+	
+	public GameSettings gs = vilgGS;
 
 	public KeyHandler keyH = new KeyHandler(this);
 	
 	TileManager tileM = new TileManager(this, gs, gs.getStatus(), gs.getTotalSize(), gs.getFile(), gs.getFileCol());
-	
-//	EnvironmentManager eManager = new EnvironmentManager(this, gs);
 	
 	Thread gameThread;
 	
@@ -42,17 +38,22 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public Player player = new Player(this, gs, keyH, gs.getPlayerX(), gs.getPlayerY());
 	
+	//LIGHTNING
+	EnvironmentManager eManager = new EnvironmentManager(this, gs);
+	Lightning lightning = new Lightning(this, gs, 320);
+	
+	
 	public boolean fullScreenOn = false;
 	Config config = new Config(this);
 	
 	//GAME STATE
 	public int gameState;
+	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
 	public final int dialogState = 3;
-	public final int titleState = 0;
-	public final int optionState = 5;
 	public final int gameOverState = 4; //5
+	public final int optionState = 5;
 	
 	// Full Screen
 	int fullScreenWidth = gs.getScreenWidth();
@@ -78,8 +79,10 @@ public class GamePanel extends JPanel implements Runnable {
 	public int curMap = 0 ; //0: Village 1:Home 2:Cave01 3:Cave02
 
 	int FPS = 60;
+	public boolean placedNeon = false;
+	public boolean placedPurple = false;
 	
-	Lightning lightning = new Lightning(this, gs, 320);
+	
 	public GamePanel() {
 
 		this.setPreferredSize(new Dimension(gs.getScreenWidth(), gs.getScreenHeight()));
@@ -91,12 +94,20 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setFocusable(true);
 	}
 	
+	public GameSettings getGs() {
+		return gs;
+	}
+	
+	public void setGs(GameSettings gs) {
+		this.gs = gs;
+	}
+	
 	public void setupGame() {
 		aSetter.setObject();
 		aSetter.setMonster();
-//		eManager.setup();
+		eManager.setup();
 		aSetter.setNPC();
-//		playMusic(0);
+		playMusic(0);
 		gameState = titleState;
 		if(gameState == playState || gameState == pauseState) {
 			playMusic(0);
@@ -107,6 +118,14 @@ public class GamePanel extends JPanel implements Runnable {
 		if(fullScreenOn == true) {
 			setFullScreen();	
 		}
+	}
+	
+	public void refreshMap() {
+		aSetter.setObject();
+		aSetter.setMonster();
+		eManager.setup();
+		aSetter.setNPC();
+		playMusic(0);
 	}
 	
 	public void setFullScreen() {
@@ -185,7 +204,6 @@ public class GamePanel extends JPanel implements Runnable {
 		player.setDefaultValues();
 		aSetter.setObject();
 		aSetter.setMonster();
-//		eManager.setup();
 		player.setDefaultItem();
 	}
 	
@@ -221,16 +239,27 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			
-			for(int i=0; i<monster.length; i++) {
-				if(monster[i] != null) {
-					monster[i].draw(g2);
+			
+			
+			if(placedNeon == false || placedPurple == false) {
+				for(int i=0; i<monster.length; i++) {
+					if(monster[i] != null) {
+						monster[i].draw(g2);
+					}
+				}
+				eManager.draw(g2);				
+			}
+			else {
+				for(int i=0; i<monster.length; i++) {
+						monster[i] = null;
 				}
 			}
 			
 			
-//			eManager.draw(g2);
-			lightning.draw(g2);
-			
+//			if(keyH.lightning == 1) {
+//				eManager.draw(g2);
+//			}
+//			
 			// NPC
 			
 			// this is player

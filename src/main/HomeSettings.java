@@ -32,7 +32,7 @@ public class HomeSettings extends GameSettings{
 	private static int worldWidth = tileSize * maxWorldCol;
 	private static int worldHeight = tileSize * maxScreenRow;
 	
-	private static int initialX = 8;
+	private static int initialX = 7;
 	private static int initialY = 7;
 	private static int status = 1;
 	private static int totalSize = 144;

@@ -33,8 +33,8 @@ public class VillageSettings extends GameSettings{
 	private static int worldHeight = tileSize * maxScreenRow;
 	
 	
-	private static int initialX = 35;
-	private static int initialY = 32;
+	private static int initialX = 25;
+	private static int initialY = 20;
 	private static int status = 0;
 	private static int totalSize = 2304;
 	

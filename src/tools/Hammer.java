@@ -10,7 +10,7 @@ public class Hammer extends ToolContainer{
 		name = "hammer";
 		showTool = true;
 		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/tools/hammer.png"));
+			image = ImageIO.read(getClass().getResourceAsStream("/tools/smallhammer.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

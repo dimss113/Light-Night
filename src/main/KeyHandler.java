@@ -14,6 +14,7 @@ public class KeyHandler implements KeyListener{
 	public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
 	public boolean xPressed, zPressed;
 	public boolean checkDrawTime;
+	public int lightning = 0;
 	
 	Entity entity;
 	
@@ -41,12 +42,14 @@ public class KeyHandler implements KeyListener{
 				if(gp.ui.commandNum < 0) {
 					gp.ui.commandNum = 2;
 				}
+				gp.playSE(6);
 			}
 			if(code == KeyEvent.VK_S) {
 				gp.ui.commandNum++;
 				if(gp.ui.commandNum > 2) {
 					gp.ui.commandNum = 0;
 				}
+				gp.playSE(6);
 			}
 			if(code == KeyEvent.VK_ENTER) {
 				switch(gp.ui.commandNum) {
@@ -62,6 +65,8 @@ public class KeyHandler implements KeyListener{
 					System.exit(0);
 					break;
 				}
+				
+				gp.playSE(7);
 			}
 		}
 		
@@ -80,7 +85,36 @@ public class KeyHandler implements KeyListener{
 				rightPressed = true;
 			}
 			if(code == KeyEvent.VK_X) {
+				if(gp.curMap == 2 && gp.ui.hasShovel == true) {
+					gp.player.shoveCount++;
+				}
+				
+				if(gp.curMap == 3) {
+					
+					if(gp.ui.hasBookOrbneon == true && gp.player.frontNeon == true) {
+						gp.tool[3].showTool = true;
+						gp.ui.hasBookOrbneon = false;
+						gp.placedNeon = true;
+						System.out.println(gp.keyH.lightning);
+//						gp.keyH.lightning++;
+					}
+					
+					if(gp.ui.hasBookOrbpurple == true && gp.player.frontPurple == true) {
+						gp.tool[4].showTool = true;
+						gp.ui.hasBookOrbpurple = false;
+						gp.placedPurple = true;
+						System.out.println(gp.keyH.lightning);
+//						gp.keyH.lightning ++;
+					}
+					
+					if(gp.tool[3].showTool == true && gp.tool[4].showTool == true) {
+						gp.tool[5].showTool = false;
+						gp.tool[6].showTool = false;
+					}
+				}
+			
 				xPressed = true;
+				
 			}
 			if(code == KeyEvent.VK_Z) {
 				zPressed = true;
@@ -105,19 +139,21 @@ public class KeyHandler implements KeyListener{
 						
 						gp.monster = new Entity[100];
 						
-						gp.ui = new UI(gp, gp.gs);
+						gp.ui.gs = gp.gs;
 						
 						gp.aSetter = new AssetSetter(gp, gp.gs);
 						gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
 						gp.cChecker = new CollisionChecker(gp, gp.getGs());
 						gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
 						
+						gp.refreshMap();
+						
 						gp.player.frontHome = false;
 					}
 				
 				else if(gp.curMap == 1 && gp.player.exitHome == true) {
 					gp.curMap = 0;
-					gp.setGs(new VillageSettings());
+					gp.setGs(gp.vilgGS);
 					
 					gp.tool = new ToolContainer[100]; // can contain 12 tools
 					
@@ -126,10 +162,10 @@ public class KeyHandler implements KeyListener{
 					gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
 					gp.cChecker = new CollisionChecker(gp, gp.getGs());
 					gp.player = new Player(gp, gp.getGs() ,gp.keyH, 23, 18);
-					gp.ui = new UI(gp, gp.gs);
-					gp.subP = new SubPanel(gp);
+					gp.ui.gs = gp.gs;
 					gp.aSetter = new AssetSetter(gp, gp.gs);
-					gp.setupGame();
+					
+					gp.refreshMap();
 					
 					gp.player.exitHome = false;
 				}
@@ -139,12 +175,12 @@ public class KeyHandler implements KeyListener{
 					System.out.println(gp.curMap);
 					if(gp.curMap == 0) {
 						gp.curMap = 2;
-						gp.setGs(new Cave01Settings());
+						gp.setGs(gp.cave01GS);
 						System.out.println(gp.curMap);
 					}
 					else if(gp.curMap == 2) {
 						gp.curMap = 3;
-						gp.setGs(new Cave02Settings());
+						gp.setGs(gp.cave02GS);
 						System.out.println(gp.curMap);
 					}
 					
@@ -155,27 +191,29 @@ public class KeyHandler implements KeyListener{
 					gp.tileM = new TileManager(gp, gp.getGs(), gp.getGs().getStatus(), gp.getGs().getTotalSize(), gp.getGs().getFile(), gp.getGs().getFileCol());
 					gp.cChecker = new CollisionChecker(gp, gp.getGs());
 					gp.player = new Player(gp, gp.getGs() ,gp.keyH, gp.getGs().getPlayerX(), gp.getGs().getPlayerY());
-					gp.ui = new UI(gp, gp.gs);
-					gp.subP = new SubPanel(gp);
+					gp.ui.gs = gp.gs;
 					gp.aSetter = new AssetSetter(gp, gp.gs);
-					gp.setupGame();
+					
+					gp.refreshMap();
 					
 					gp.player.frontCave = false;
 				}
 				
 				if(gp.player.exitCave == true) {
 					System.out.println("exit");
-					System.out.println(gp.curMap);
+					
+					System.out.println(gp.player.hasLava);
 					int temp = gp.curMap;
 					if(gp.curMap == 2) {
 						gp.curMap = 0;
 						System.out.println(gp.curMap);
-						gp.setGs(new VillageSettings());
+						gp.setGs(gp.vilgGS);
 					}
 					else if(gp.curMap == 3) {
 						gp.curMap = 2;
 						System.out.println(gp.curMap);
-						gp.setGs(new Cave01Settings());
+						gp.setGs(gp.cave01GS);
+						
 					}
 					
 					gp.tool = new ToolContainer[100]; // can contain 12 tools
@@ -190,11 +228,11 @@ public class KeyHandler implements KeyListener{
 					else if(temp == 3) {
 						gp.player = new Player(gp, gp.getGs() ,gp.keyH, 14, 1);
 					}
+					gp.player.hasLava = false;
 					
-					gp.ui = new UI(gp, gp.gs);
-					gp.subP = new SubPanel(gp);
+					gp.ui.gs = gp.gs;
 					gp.aSetter = new AssetSetter(gp, gp.gs);
-					gp.setupGame();
+					gp.refreshMap();
 					
 					gp.player.exitCave = false;
 					}
@@ -236,7 +274,7 @@ public class KeyHandler implements KeyListener{
 		
 			
 		if(gp.gameState == gp.gameOverState) {
-			if(code == KeyEvent.VK_UP) {
+			if(code == KeyEvent.VK_W) {
 				gp.ui.commandNum--;
 				if(gp.ui.commandNum < 0) {
 					gp.ui.commandNum = 1;
@@ -245,7 +283,7 @@ public class KeyHandler implements KeyListener{
 				gp.playSE(6);
 			}
 			
-			if(code == KeyEvent.VK_DOWN) {
+			if(code == KeyEvent.VK_S) {
 				gp.ui.commandNum++;
 				if(gp.ui.commandNum > 1) {
 					gp.ui.commandNum = 0;
@@ -257,13 +295,13 @@ public class KeyHandler implements KeyListener{
 			if(code == KeyEvent.VK_ENTER) {
 				if(gp.ui.commandNum == 0) {
 					gp.gameState = gp.playState;
-					gp.playSE(7);
 					gp.retry();
 				}
 				
 				if(gp.ui.commandNum == 1) {
-					
+					gp.gameState = gp.titleState;
 			}
+				gp.playSE(7);
 		}
 	}
 }

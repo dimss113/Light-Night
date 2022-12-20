@@ -37,16 +37,16 @@ public class UI {
 	public String message = "";
 	int messageCounter = 0;
 	public boolean gameFinished = false;
-	public boolean hasKey = true;
-	public boolean hasShovel = false;
+	public boolean hasKey = false;
+	public boolean hasShovel = true;
 	public boolean hasBoots = false;
 	public boolean hasSword = false;
-	public boolean hasPotion = false;
+	public boolean hasPotion = true;
 	public boolean hasBucketEmpty = false;
 	public boolean isBucketFull = false;
-	public boolean hasBookOrbneon = false;
+	public boolean hasBookOrbneon = true;
 	public boolean showTextPanel = false;
-	public boolean hasBookOrbpurple = false;
+	public boolean hasBookOrbpurple = true;
 	public int tileSize;
 	
 	public String currentDialog = "";	
@@ -63,9 +63,11 @@ public class UI {
 	int exitX;
 	int retryY;
 	int exitY;
+	public GameSettings gs;
 	
 	public UI(GamePanel gp, GameSettings gs) {
 		this.gp = gp;
+		this.gs = gs;
 		arial_40 = new Font("Arial", Font.PLAIN, 20);
 		ShovelTool shovel = new ShovelTool();
 		AxeTool axe = new AxeTool();
@@ -89,6 +91,7 @@ public class UI {
 		bucketFullImage = bF.image;
 		bookOrbPurpleImage = bp.image;
 		bookOrbneonImage = bo.image;
+		
 		this.tileSize = gs.getTileSize();
 		try {
 			textPanel = ImageIO.read(getClass().getResourceAsStream("/tools/textpanel.png"));			
@@ -121,9 +124,6 @@ public class UI {
 	}
 	
 	public void draw(Graphics2D g2) {
-		
-		System.out.println(gp.gameState);
-		
 		if(gp.gameState == gp.playState && gp.gameState != gp.titleState) {
 			g2.setFont(arial_40);
 			g2.setColor(Color.white);
@@ -473,7 +473,7 @@ public class UI {
 		// TITLE NAME
 		BufferedImage imageLogo;
 		try {
-			g2.drawRect(0, 0, gp.gs.getScreenWidth(),gp.gs.getScreenHeight());
+			g2.drawRect(0, 0, gp.vilgGS.getScreenWidth(),gp.vilgGS.getScreenHeight());
 			g2.fillRect(0, 0, gp.gs.getScreenWidth(), gp.gs.getScreenHeight());
 			imageLogo = ImageIO.read(getClass().getResourceAsStream("/tools/logo.png"));
 			g2.drawImage(imageLogo, 0, 0, gp.gs.getScreenWidth(), gp.gs.getScreenHeight(), null);
@@ -512,7 +512,7 @@ public class UI {
 		if(commandNum == 2) {
 			g2.drawString(">", x-gp.gs.getTileSize() + 10, y);
 		}
-		
+	
 	}
 	
 	public void drawDialogScreen() {

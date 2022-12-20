@@ -25,8 +25,13 @@ public class Chest2 extends ToolContainer{
 				e.printStackTrace();
 			}
 			break;
+		case 3:
+			try {
+				image = ImageIO.read(getClass().getResourceAsStream("/tiles/cave01_99.png"));
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
-
 		collision = true;
 	}
 	

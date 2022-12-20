@@ -1,12 +1,8 @@
 /tiles/
-/tools/
 /entity/
 /environment/
 /main/
-/monster/
 /tile/
-/object/
-/sounds/
+/tools/
+/monster/
 /maps/
-/player/
-/npc/

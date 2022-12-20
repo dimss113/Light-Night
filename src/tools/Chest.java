@@ -38,6 +38,9 @@ public class Chest extends ToolContainer{
 			collision = true;
 			showTool = true;
 		}
+		
+		
+		
 		collision = true;
 	}
 	

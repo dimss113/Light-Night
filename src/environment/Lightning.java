@@ -16,7 +16,8 @@ public class Lightning {
 	GamePanel panel;
 	
 	BufferedImage darknessFilter;
-	
+	public Color color[];
+	public float fraction[];
 	
 	public Lightning(GamePanel gp, GameSettings gs, int circleSize) {
 		darknessFilter = new BufferedImage(gs.getScreenWidth(), gs.getScreenHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -38,8 +39,8 @@ public class Lightning {
 		// substract the light circle from the screen rectangle
 		screenArea.subtract(lightArea);
 		
-		Color color[] = new Color[12];
-		float fraction[] = new float[12];
+		color = new Color[12];
+		fraction = new float[12];
 		color[0] = new Color(0,0,0,0.02f);
 		color[1] = new Color(0,0,0,0.2f);
 		color[2] = new Color(0,0,0,0.52f);

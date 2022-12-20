@@ -26,7 +26,7 @@ public class Player extends Entity{
 	public int initialPosY;
 	public int tileSize;
 	public int hasAxe = 0; // indicates how tools karakter has
-	public int hasHammer = 0;
+	public int hasHammer = 1;
 	public boolean hasShovel = false;
 	public int fillBucket = 0;
 	public int count = 0;
@@ -35,7 +35,14 @@ public class Player extends Entity{
 	public boolean exitHome = false;
 	public boolean frontCave = false;
 	public boolean exitCave = false;
+	public int shoveCount = 0;
+	public boolean hasLava = true;
+	public boolean frontSoil = false;
+	public boolean frontPurple = false;
+	public boolean frontNeon = false;
 	
+
+
 	
 
 	
@@ -190,7 +197,7 @@ public class Player extends Entity{
 			invisibleCounter++;
 			if(invisibleCounter > 60) {
 				invisible = false;
-				invisibleCounter =0;
+				invisibleCounter = 0;
 			}
 		}
 		
@@ -214,6 +221,7 @@ public class Player extends Entity{
 					gp.ui.hasShovel  = true;
 					gp.ui.showMessage("You got Shovel");
 					break;
+					
 				case "Axe":
 					gp.playSE(1);
 					hasAxe +=2;
@@ -226,7 +234,7 @@ public class Player extends Entity{
 					hasHammer +=2;
 					gp.tool[i] = null;
 //				System.out.println("Shovel: " + hasShovel);
-					gp.ui.showMessage("You got hammer for remove stone");
+					gp.ui.showMessage("You got Hammer for remove stone");
 					break;
 				case "bucket empty":
 					gp.playSE(3);
@@ -238,17 +246,17 @@ public class Player extends Entity{
 					break;
 				case "Boots":
 					gp.playSE(2);
-					speed += 1;
+					speed += 0.5;
 					gp.tool[i] = null;
 					gp.ui.hasBoots = true;
-					gp.ui.showMessage("+ 1 speed!");
+					gp.ui.showMessage("+ 0.5 speed!");
 					break;
 				case "stone":
 					prevPress = 0;
 					if(hasHammer > 0) {
 						gp.ui.showMessage("preseed x to remove stone");
 						if(removeObj == true) {
-							System.out.println("masuk presx");
+							System.out.println("masuk press x");
 							gp.tool[i] = null;
 							hasHammer--; 
 							removeObj = false;
@@ -294,14 +302,22 @@ public class Player extends Entity{
 						if(i == 10) {
 							gp.tool[9].showTool = true;						
 						}
-						if(i == 15) {
-							gp.tool[0].showTool =  true;
+						if(i == 32) {
+							gp.tool[15].showTool =  true;
+							curLife++;
 						}
 						if(i == 20) {
 							gp.tool[5].showTool = true;
 						}
 						removeObj = false;
 					}
+					break;
+				case "heart":
+					prevPress = 0;
+					System.out.println("masuk nulllll");
+					gp.playSE(1);
+					curLife++;
+					gp.tool[i] = null;
 					break;
 				case "Chest 2":
 					gp.ui.showMessage("press x to open chest");
@@ -387,8 +403,11 @@ public class Player extends Entity{
 						gp.tool[i] = null;
 						if(i == 23) {
 							gp.tool[2].showTool = true;
+							curLife++;
 						}
-						removeObj = false;
+						if(i == 31) {
+							gp.tool[30].showTool = true;
+						}
 					}
 					break;
 				case "chest2 " + 2:
@@ -400,9 +419,26 @@ public class Player extends Entity{
 					if(i == 4) {
 						gp.tool[24].showTool = true;
 					}
+					if(i == 29) {
+						gp.tool[4].showTool = true;
+					}
 					removeObj = false;
 				}
-				break;				
+				break;			
+				
+				case "chest2 " + 3:
+					prevPress = 0;
+				gp.ui.showMessage("press x to open chest");
+				if(removeObj == true) {
+					System.out.println("remove chest in cave 3");
+					gp.tool[i] = null;
+					if(i == 5) {
+						gp.tool[4].showTool = true;
+					}
+					removeObj = false;
+				}
+				break;
+				
 				case "key":
 					gp.playSE(1);
 					gp.tool[i] = null;
@@ -425,9 +461,22 @@ public class Player extends Entity{
 					break;
 				case "Book Orbneon":
 					gp.playSE(1);
-					gp.tool[i] = null;
-					gp.ui.hasBookOrbneon = true;
-					gp.ui.showMessage("you can use this book to remove the curse");
+					prevPress = 0;
+					if(gp.curMap == 1) {
+						gp.tool[i] = null;
+						gp.ui.hasBookOrbneon = true;
+						gp.ui.showMessage("you can use this book to remove the curse");
+					}
+					if(gp.curMap == 3 && gp.ui.hasBookOrbneon == true) {
+						frontNeon = true;
+						frontPurple = false;
+						gp.ui.showMessage("Press X to press Neon book");
+						if(removeObj == true) {
+							gp.ui.hasBookOrbneon = false;
+							keyH.lightning++;
+						}
+					}
+					removeObj = false;
 					break;
 				case "Chest 4":
 					prevPress = 0;
@@ -443,11 +492,23 @@ public class Player extends Entity{
 					break;	
 				case "Book Orb Purple":
 					gp.playSE(1);
+					prevPress = 0;
 					if(gp.tool[25] == null) {
 						gp.tool[26] = null;
 						gp.ui.hasBookOrbpurple = true;
 						gp.ui.showMessage("you can use this book to remove the curse");					
 					}
+					
+					if(gp.curMap == 3 && gp.ui.hasBookOrbpurple == true) {
+						frontPurple = true;
+						frontNeon = false;
+						gp.ui.showMessage("Press X to press Purple book");
+						if(removeObj == true) {
+							gp.ui.hasBookOrbpurple = false;
+							keyH.lightning ++;
+						}
+					}
+					removeObj = false;
 					break;
 					
 				case "House Door": 
@@ -459,7 +520,7 @@ public class Player extends Entity{
 					
 				case "Exit Home":
 					prevPress = 0;
-					gp.ui.showMessage("press e to exit Cave");
+					gp.ui.showMessage("press e to exit house");
 					exitHome = true;
 					frontHome = false;
 					break;
@@ -468,6 +529,14 @@ public class Player extends Entity{
 					prevPress = 0;
 					gp.ui.showMessage("press e to enter Cave");
 					frontCave = true;
+					exitCave = false;
+					break;
+					
+				case "Cave02 Door":
+					prevPress = 0;
+					gp.ui.showMessage("press e to enter Cave");
+					frontCave = true;
+					exitCave = false;
 					break;
 					
 					
@@ -478,8 +547,30 @@ public class Player extends Entity{
 					frontCave = false;
 					break;
 					
+				case "Soil":
+					if(gp.ui.hasShovel == true) {
+						
+						prevPress = 0;
+						frontSoil = true;
+						if(shoveCount == 0) {
+							gp.ui.showMessage("Press X to shove the soil");
+						}
+						
+						else if(shoveCount > 5) {
+							hasLava = false;
+							for(int x = 8; x < 42; x++) {
+								gp.tool[x] = null;
+							}
+						}
+						else {
+							gp.ui.showMessage("Keep shoving!!!");
+						}
+					}
+					else {
+						gp.ui.showMessage("You dont have shovel to remove soil");
+					}
+				break;
 				}
-				
 			}
 			
 //		}

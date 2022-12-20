@@ -8,7 +8,7 @@ import main.GamePanel;
 
 public class Heart extends ToolContainer{
 	public Heart() {
-		name = "bucket empty";
+		name = "heart";
 		showTool = false;
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/tools/heart_full.png"));
