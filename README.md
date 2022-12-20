@@ -24,15 +24,23 @@
 > in this game we have created 3 maps, the first one is Village Map, second is Cave Map and the third is Home Map.
 
 - Village Map
+
 > In this map there are many items that can help player to pass the challenge
+
 ![villagemap](https://user-images.githubusercontent.com/89715780/208632969-df533e3e-1a65-4858-b17c-3781c3e21997.png)
 
 - Cave Map
+
 > In this map, player can use item that have been collected in the previous map to break the curse.
+
 ![cave2](https://user-images.githubusercontent.com/89715780/208633081-c7c27326-b5cb-4580-84a6-a85976cc01bf.png) ![cave](https://user-images.githubusercontent.com/89715780/208633117-e82cdbe0-d93b-47df-87dc-88448ab665af.png)
 
 - Home Map
+
+
 > In this map you can rest an gain your health.
+
+
 ![home](https://user-images.githubusercontent.com/89715780/208633149-16bfae38-4fc3-4700-b8fc-e1f24ba1a776.png)
 
 
